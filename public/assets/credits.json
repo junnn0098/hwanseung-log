@@ -1,0 +1,65 @@
+[
+  {
+    "file": "palace.jpg",
+    "title": "Gyeongbokgung Palace",
+    "author": "Christopher Phua",
+    "license": "Unsplash License",
+    "licenseUrl": "https://unsplash.com/license",
+    "source": "https://unsplash.com/photos/gyeongbokgung-palace-with-many-visitors-xIJZvmI8Mt4",
+    "modifications": "Resized for web; cropped by CSS."
+  },
+  {
+    "file": "street.jpg",
+    "title": "Seoul-Insadong-01.jpg",
+    "author": "Chino Lemus",
+    "license": "CC BY-SA 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Seoul-Insadong-01.jpg",
+    "modifications": "Resized for web; cropped by CSS."
+  },
+  {
+    "file": "songdo.jpg",
+    "title": "Songdo Central Park and Posco Tower Songdo.jpg",
+    "author": "Jaehyuk Lee",
+    "license": "CC BY-SA 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Songdo_Central_Park_and_Posco_Tower_Songdo.jpg",
+    "modifications": "Resized for web; cropped by CSS."
+  },
+  {
+    "file": "museum.jpg",
+    "title": "National Museum of Korea exterior.jpg",
+    "author": "Tristan Surtel",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:National_Museum_of_Korea_exterior.jpg",
+    "modifications": "Resized for web; cropped by CSS."
+  },
+  {
+    "file": "food.jpg",
+    "title": "Chinatown Gate, Incheon.jpg",
+    "author": "Ken Eckert",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Chinatown_Gate,_Incheon.jpg",
+    "modifications": "Resized for web; cropped by CSS."
+  },
+  {
+    "author": "Republic of  Korea",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+    "modifications": "Resized for web; cropped by CSS.",
+    "source": "https://commons.wikimedia.org/wiki/File:National_Museum_of_World_Writing_Systems_02.jpg",
+    "title": "National Museum of World Writing Systems 02.jpg",
+    "file": "writing.jpg",
+    "license": "CC BY-SA 2.0"
+  },
+  {
+    "author": "Clark Gu",
+    "licenseUrl": "https://unsplash.com/license",
+    "modifications": "Resized for web; cropped by CSS.",
+    "source": "https://unsplash.com/photos/a-large-greenhouse-filled-with-lots-of-plants-18Eau_Av5y8",
+    "title": "Seoul Botanic Park",
+    "file": "garden.jpg",
+    "license": "Unsplash License"
+  }
+]
