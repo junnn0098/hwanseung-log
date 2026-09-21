@@ -4,3 +4,12 @@ node_modules/
 *.log
 .openai/*.tmp
 dist/
+data/
+releases/
+*.zip
+.dev.vars
+.dev.vars.*
+!.dev.vars.example
+.wrangler/
+.env.*
+!.env.example

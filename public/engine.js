@@ -1,4 +1,4 @@
-import {PLACES, AIRPORT_TRAVEL, TRAVEL_COST} from './data.js?v=1.0.1';
+import {PLACES, AIRPORT_TRAVEL, TRAVEL_COST} from './data.js?v=1.2.2';
 export function minutes(time) { const m=/^(\d{2}):(\d{2})$/.exec(time||''); return m&&+m[1]<24&&+m[2]<60?+m[1]*60 + +m[2]:NaN; }
 export function clock(min) { const m=((Math.round(min)%1440)+1440)%1440;return `${Math.floor(m/60).toString().padStart(2,'0')}:${(m%60).toString().padStart(2,'0')}`; }
 export function duration(n,lang='ko') {n=Math.max(0,Math.round(n));const h=Math.floor(n/60),m=n%60;return lang==='en'?`${h?h+'h ':''}${m||!h?m+'m':''}`.trim():`${h?h+'시간 ':''}${m||!h?m+'분':''}`.trim();}
@@ -20,13 +20,13 @@ export function isOpen(place,start,end,iso) {
   return start>=from&&end<=to;
 }
 export function getBudget(trip,scenario={}) {
-  const arrival=minutes(trip.arrival), departure=minutes(trip.departure)+(trip.nextDay?1440:0);
+  const arrival=minutes(trip.arrival), departure=Math.min(minutes(trip.departure)+(trip.nextDay?1440:0),Number.isFinite(scenario.departureCap)?scenario.departureCap:Infinity);
   const delay=Math.max(0,+scenario.delay||0),traffic=Math.max(0,+scenario.traffic||0);
   const airportExtra=trip.terminal==='T2'?20:0;
   const luggage=trip.recheck?45:0;
   const initial=arrival+Math.max(0,+trip.immigration||0)+delay+luggage;
   const current=minutes(scenario.currentTime)+(scenario.currentNextDay?1440:0);
-  const start=scenario.currentPlace&&Number.isFinite(current)?Math.max(initial,current):initial;
+  const start=Math.max(scenario.currentPlace&&Number.isFinite(current)?Math.max(initial,current):initial,Number.isFinite(scenario.earliestStart)?scenario.earliestStart:0);
   const cutoff=departure-Math.max(0,+trip.security||0)-Math.max(0,+trip.buffer||0)-airportExtra;
   return {arrival,departure,start,cutoff,delay,traffic,luggage,available:Math.max(0,cutoff-start),total:departure-arrival};
 }
@@ -36,12 +36,14 @@ export function buildRoute(ids,trip,scenario={},catalog=PLACES) {
   if(!selected.length||selected.length!==ids.length||new Set(ids).size!==ids.length)return null;
   const first=selected[0],last=selected.at(-1);
   if(!Number.isFinite(AIRPORT_TRAVEL[mode][first.region]))return null;
-  let now=b.start+(scenario.currentPlace?0:AIRPORT_TRAVEL[mode][first.region]+b.traffic);
-  const events=[];let totalCost=scenario.currentPlace?Math.ceil(TRAVEL_COST[mode][last.region]/2):TRAVEL_COST[mode][first.region];
+  const measured=scenario.measuredLegs;
+  if(measured&&(measured.length!==ids.length+1||measured.some(l=>!Number.isFinite(l.minutes)||l.minutes<0||!Number.isFinite(l.fare)||l.fare<0)))return null;
+  let now=b.start+(measured?measured[0].minutes+b.traffic:scenario.currentPlace?0:AIRPORT_TRAVEL[mode][first.region]+b.traffic);
+  const events=[];let totalCost=measured?measured.reduce((sum,l)=>sum+l.fare,0):scenario.currentPlace?Math.ceil(TRAVEL_COST[mode][last.region]/2):TRAVEL_COST[mode][first.region];
   for (let i=0;i<selected.length;i++) {
     const p=selected[i];
-    if(i>0)now+=p.region===selected[i-1].region?20:50;
-    if(i===0&&scenario.currentPlace&&scenario.currentPlace!==p.id)now+=20;
+    if(i>0)now+=measured?measured[i].minutes:(p.region===selected[i-1].region?20:50);
+    if(!measured&&i===0&&scenario.currentPlace&&scenario.currentPlace!==p.id)now+=20;
     const day=Math.floor(now/1440),openAt=day*1440+p.open*60;
     const wait=Math.max(0,openAt-now);if(wait>90)return null;now+=wait;
     const dwell=scenario.tired?Math.max(30,p.duration-15):p.duration;
@@ -50,7 +52,7 @@ export function buildRoute(ids,trip,scenario={},catalog=PLACES) {
     if((scenario.skip||[]).includes(p.id))return null;
     events.push({id:p.id,start:now,end:now+dwell,wait});now+=dwell;totalCost+=p.cost;
   }
-  const returnTravel=AIRPORT_TRAVEL[mode][last.region]+b.traffic;
+  const returnTravel=(measured?measured.at(-1).minutes:AIRPORT_TRAVEL[mode][last.region])+b.traffic;
   const back=now+returnTravel;
   const budget=scenario.currentPlace&&Number.isFinite(+scenario.remainingBudget)?Math.min(+trip.budget,+scenario.remainingBudget):+trip.budget;
   if(back>b.cutoff||totalCost>budget)return null;

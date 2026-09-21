@@ -1,0 +1,9 @@
+*
+!package.json
+!server.mjs
+!integrations.mjs
+!tourism.mjs
+!request-guard.mjs
+!public/
+!public/**
+!Dockerfile

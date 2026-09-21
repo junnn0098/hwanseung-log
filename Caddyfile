@@ -1,0 +1,10 @@
+{$DOMAIN} {
+    encode zstd gzip
+    header {
+        -Server
+        Permissions-Policy "camera=(), microphone=()"
+    }
+    reverse_proxy app:4173 {
+        header_up X-Real-IP {remote_host}
+    }
+}

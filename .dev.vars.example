@@ -1,0 +1,7 @@
+# Cloudflare local dev only. Never paste the Server ODsay key into the public key field.
+TOUR_API_KEY=""
+AIRPORT_API_KEY=""
+KAKAO_REST_API_KEY=""
+# Newly issued ODsay Web platform key; allowed domain must match the deployed hostname.
+# This key is intentionally sent to the browser. It is not the existing Server key.
+ODSAY_WEB_PUBLIC_KEY=""
